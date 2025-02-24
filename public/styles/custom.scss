@@ -1,0 +1,54 @@
+
+
+$primary: #058ECF; 
+$font-family-base: "Poppins", sans-serif;
+$input-border-color: #333;
+
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/mixins";
+@import "../../node_modules/bootstrap/scss/maps";
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
+.input-underlined {
+    border: none;
+    border-bottom: 2px solid gray;
+    border-radius: 0;
+    outline: none;
+    padding: 0.9rem 0;
+    box-shadow: none;
+
+    &:focus {
+        border-bottom-color: $primary;
+        outline: none;
+        box-shadow: none;
+    }
+}
+
+.input-container:focus-within label {
+    color: $primary;
+    transition: 0.3s ease-in-out;
+  }
+
+  ///////////////////////////////////
+
+  .form-control::placeholder{
+    font-size: 1.5rem;
+  }
+
+  .py-6 {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+  .px-6 {
+    padding-left: 6rem;
+    padding-right: 6rem;
+  }
+
+  //////////////////////////////
+
+  .table {
+    tr {
+      border-bottom: 2px solid lightgray;
+    }
+  }

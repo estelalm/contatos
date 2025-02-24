@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="node_modules/bootstrap/dist/css/bootstrap.min.css"
+    />
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="./public/styles/custom.css" />
+    <script src="./public/js/index.js" type="module"></script>
+    <title>Contatos</title>
+  </head>
+  <body
+    class="d-flex flex-column min-vh-100 min-vw-100 overflow-x-hidden justify-content-center"
+  >
+    <header
+      class="bg-primary d-flex align-items-center text-light rounded-top-4"
+    >
+      <img src="./public/assets/logo_alphacode.png" alt="" />
+      <h1>Cadastro de contatos</h1>
+    </header>
+    <main class="container-fluid flex-grow-1 h-100 fs-5">
+        <section id="section-cadastro" class="px-5 d-flex flex-column h-100 flex-grow-1 py-6 fw-semibold text-secondary">
+            <form id="form-contato" class="d-flex flex-column">
+              <div class="">
+                <div class="row pb-5">
+                  <div class="flex-column col-sm">
+                    <label class="form-label">Nome completo</label>
+                    <input maxlength="150" id="input-nome" type="text" placeholder="Ex.: Letícia Pacheco dos Santos" class="form-control input-underlined" />
+                  </div>
+                  <div class="flex-column col-sm">
+                    <label class="form-label">Data de nascimento</label>
+                    <input maxlength="10" id="input-nascimento" type="text" placeholder="Ex.: 03/10/2003" class="form-control input-underlined" />
+                  </div>
+                </div>
+                <div class="row pb-5">
+                  <div class="flex-column col-sm">
+                    <label class="form-label">E-mail</label>
+                    <input maxlength="150" id="input-email" type="text" placeholder="Ex.: leticia@gmail.com" class="form-control input-underlined" />
+                  </div>
+                  <div class="flex-column col-sm">
+                    <label class="form-label">Profissão</label>
+                    <input maxlength="150" id="input-profissao" type="text" placeholder="Ex.: Desenvolvedora Web" class="form-control input-underlined" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="flex-column col-sm">
+                    <label class="form-label">Telefone para contato</label>
+                    <input maxlength="14" id="input-telefone" type="text" placeholder="Ex.: (11) 4003-2019" class="form-control input-underlined" />
+                  </div>
+                  <div class="flex-column col-sm">
+                    <label class="form-label">Celular para contato</label>
+                    <input maxlength="15" id="input-celular" type="text" placeholder="Ex.: (11) 98493-2039" class="form-control input-underlined" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="container-fluid pt-5 fs-4">
+                <div class="row pb-4">
+                  <div class="checkbox-container col-sm">
+                    <input id="check-whatsapp" type="checkbox" class="form-check-input" />
+                    <label class="ps-3">Número de celular possui Whatsapp</label>
+                  </div>
+                  <div class="checkbox-container col-sm">
+                    <input id="check-email" type="checkbox" class="form-check-input" />
+                    <label class="ps-3">Enviar notificações por E-mail</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="checkbox-container col-sm">
+                    <input id="check-sms" type="checkbox" class="form-check-input" />
+                    <label class="ps-3">Enviar notificações por SMS</label>
+                  </div>
+                </div>
+              </div>
+          
+              <button type="submit" id="btn-cadastrar" class="btn btn-lg btn-primary ms-auto text-light fs-3 fw-semibold">
+                Cadastrar contato
+              </button>
+            </form>
+          </section>
+          
+
+      <hr>
+
+      <section id="section-lista-contatos" class="container-fluid py-6">
+        <table class="table shadow-sm p-3 mb-5 fs-3 f">
+          <thead>
+            <tr class="">
+              <th scope="col" class="bg-primary text-center text-light">
+                Nome
+              </th>
+              <th scope="col" class="bg-primary text-center text-light">
+                Data de Nascimento
+              </th>
+              <th scope="col" class="bg-primary text-center text-light">
+                E-mail
+              </th>
+              <th scope="col" class="bg-primary text-center text-light">
+                Celular para contato
+              </th>
+              <th scope="col" class="bg-primary text-center text-light">
+                Ações
+              </th>
+            </tr>
+          </thead>
+          <tbody id="container-contatos" class="text-center fs-4">
+            <!-- <tr>
+              <td class="py-4">Letícia Pacheco</td>
+              <td class="py-4">03/10/2003</td>
+              <td class="py-4">leticia@gmail.com</td>
+              <td class="py-4">(11) 98493-2039</td>
+              <td class="py-4 flex">
+                <button class="h-100 bg-transparent border-0">
+                    <img src="./public/assets/editar.png" alt="">
+                </button>
+                <button class="h-100 bg-transparent border-0">
+                    <img src="./public/assets/excluir.png" alt="">
+                </button>
+              </td>
+            </tr> -->
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <footer class="row bg-primary text-light rounded-bottom-2 fs-4 px-5 py-5">
+      <span class="col-sm">Termos | Políticas</span>
+      <div class="d-sm-flex col-md">
+        <span>&copy; Copyright 2022 | Desenvolvido por </span>
+        <img
+        class="w-25"
+          src="./public/assets/logo_rodape_alphacode.png"
+          alt="Logo da alphacode"
+        />
+      </div>
+      <span class="col-sm text-end pe-2-">&copy;Alphacode IT Solutions 2022</span>
+    </footer>
+  </body>
+</html>
