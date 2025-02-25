@@ -15,13 +15,46 @@ function formatarData(data){
     return data
 }
 
+function mostrarToast(message, type) {
+    let toastContainer = $("#toast-container")
+
+    if (toastContainer.length === 0) {
+        toastContainer = $("<div>").attr("id", "toast-container").addClass("position-fixed top-0 end-0 p-3").appendTo("body")
+    }
+
+    let toastId = `toast-${Date.now()}`
+    
+    let toastHTML = $(`
+        <div id="${toastId}" class="toast align-items-center text-bg-${type} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    ${message}
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    `)
+
+    toastContainer.append(toastHTML)
+
+    let toastElement = toastHTML.get(0)
+    let toast = new bootstrap.Toast(toastElement, { delay: 3000 })
+    toast.show()
+
+    setTimeout(() => {
+        toastHTML.fadeOut(300, function () {
+            $(this).remove()
+        })
+    }, 3500)
+}
+
 $(function () {
 
 
     function listarContatos(){
         getContatos().then(contatos => {
             let tabela = $("#container-contatos")
-            tabela.empty() // ver se tem outra forma de fazer isso
+            tabela.empty() 
     
             contatos.forEach(contato =>{
     
@@ -35,16 +68,35 @@ $(function () {
                 let btnEditar = $("<button>")
                     .addClass("h-100 bg-transparent border-0")
                     .append($("<img>").attr("src", "./public/assets/editar.png").attr("alt", "Editar"))
-                
+
                 let btnExcluir = $("<button>")
                     .addClass("h-100 bg-transparent border-0")
                     .append($("<img>").attr("src", "./public/assets/excluir.png").attr("alt", "Excluir"))
     
-                btnExcluir.on("click", () =>{
-                    if(confirm("Tem certeza que deseja excluir o contato?")){
-                        excluirContato(contato.id).then(() =>{ linhaContato.remove() })
-                    }
+                 //exclusão do contato
+                 btnExcluir.on("click", () => {
+                    let modal = new bootstrap.Modal($("#modalConfirmacao")[0]) 
+                    $("#btn-confirmar-exclusao").attr("data-id", contato.id) // Guardar o ID no botão
+                    modal.show()
                 })
+                
+                $("#btn-confirmar-exclusao").on("click", function () {
+                    let contatoId = $(this).attr("data-id")
+                    let linhaContato = $("#" + contatoId) 
+                
+                    if (contatoId) {
+                        excluirContato(contatoId).then(() => {
+                            linhaContato.remove()
+                            mostrarToast("Contato excluído com sucesso!", "success")
+                        }).catch(() => {
+                            mostrarToast("Erro ao excluir contato!", "warning")
+                        })
+                    }
+                    $("#modalConfirmacao").modal("hide") 
+                })
+                
+            // 
+    
     
                 btnEditar.on("click", () =>{
     
@@ -129,38 +181,52 @@ $(function () {
         let enviarEmail = $("#check-email").is(":checked")
         let enviarSms = $("#check-sms").is(":checked")
 
-        let contatoJSON = {
-            "nome": nome,
-            "email": email,
-            "data_nascimento": dataNascimento,
-            "celular": celular,
-            "profissao": profissao,
-            "telefone": telefone,
-            "enviar_sms": enviarSms,
-            "enviar_email": enviarEmail,
-            "possui_whatsapp": possuiWhatsapp
-        }
-
-        let btnSubmit = $("#btn-cadastrar")
-
-        if(btnSubmit.hasClass("modo-editar")){
-            atualizarContato(btnSubmit.attr("data-id"), contatoJSON).then(response =>{
-                alert(response.mensagem)
-                $("#form-contato")[0].reset(); 
-                btnSubmit.text("Cadastrar contato").removeClass("modo-editar")
-                listarContatos()
-            }).catch(error => {
-                alert("Erro ao editar contato!"); 
-                console.error("Erro:", error); 
-            });
+        if (!nome || !email || !profissao || !dataNascimento || !celular) {
+            mostrarToast("Os campos obrigatórios devem ser preenchidos.", "danger")
+        }else if(celular.length != 11){
+            mostrarToast("O número de celular é inválido.", "danger")
+        }else if(telefone.length > 0 && telefone.length != 10){
+            mostrarToast("O número de telefone é inválido.", "danger")
+        }else if(dataNascimento.length != 10){
+            mostrarToast("A data de nascimento é inválida.", "danger")
         }else{
-            criarContato(contatoJSON).then(response =>{
-                alert(response.mensagem)
-            }).catch(error => {
-                alert("Erro ao cadastrar contato!"); 
-                console.error("Erro:", error); 
-            });
+            let contatoJSON = {
+                "nome": nome,
+                "email": email,
+                "data_nascimento": dataNascimento,
+                "celular": celular,
+                "profissao": profissao,
+                "telefone": telefone,
+                "enviar_sms": enviarSms,
+                "enviar_email": enviarEmail,
+                "possui_whatsapp": possuiWhatsapp
+            }
+    
+            let btnSubmit = $("#btn-cadastrar")
+    
+            if(btnSubmit.hasClass("modo-editar")){
+                atualizarContato(btnSubmit.attr("data-id"), contatoJSON).then(response =>{
+                     mostrarToast(response.mensagem, "success")
+                    $("#form-contato")[0].reset()  
+                    btnSubmit.text("Cadastrar contato").removeClass("modo-editar")
+                    listarContatos()
+                }).catch(error => {
+                     mostrarToast("Erro ao editar contato.", "warning")
+                    console.error("Erro:", error)
+                }) 
+            }else{
+                criarContato(contatoJSON).then(response =>{
+                     mostrarToast(response.mensagem, "success")
+                     $("#form-contato")[0].reset()  
+                     listarContatos()
+                }).catch(error => {
+                     mostrarToast("Erro ao cadastrar contato.", "warning")
+                    console.error("Erro:", error)
+                }) 
+            }
         }
+
+
 
     })
 
